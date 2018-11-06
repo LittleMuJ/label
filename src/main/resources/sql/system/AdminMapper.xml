@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.label.biz.system.dao.AdminDao">
+    <parameterMap id="parameterMap" type="com.label.biz.system.entity.Admin"></parameterMap>
+    <resultMap id="AdminResultMap" type="com.label.biz.system.entity.Admin"></resultMap>
+
+
+    <sql id="columnSql">
+		<trim suffixOverrides=",">
+			t."id",
+			t."phone",
+			t."email",
+			t."username",
+			t."password",
+            t."created_at",
+            t."updated_at",
+	 	</trim>
+	</sql>
+	
+    <select id="getById" parameterType="Integer" resultMap="AdminResultMap">
+        select
+			<include refid="columnSql"></include>
+		from admin t
+		where t.id = #{value}
+    </select>
+
+
+
+    <insert id="add" parameterMap="parameterMap">
+		insert into admin
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			id,
+			phone,
+			email,
+			username,
+			password,
+            created_at,
+            updated_at,
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			#{id},
+			#{phone},
+			#{email},
+			#{username},
+			#{password},
+            #{createdAt},
+            #{updatedAt},
+		</trim>
+	</insert>
+	
+	
+	<update id="updateNotNull" parameterMap="parameterMap">
+		update admin
+		<set>
+			<if test="id != null">
+			id = #{id},
+			</if>
+			<if test="phone != null">
+			phone = #{phone},
+			</if>
+			<if test="email != null">
+			email = #{email},
+			</if>
+			<if test="username != null">
+			username = #{username},
+			</if>
+			<if test="password != null">
+			password = #{password},
+			</if>
+            <if test="createdAt != null">
+                created_at = #{createdAt},
+            </if>
+            <if test="updatedAt != null">
+                updated_at = #{updatedAt},
+            </if>
+		</set>
+		where id = #{id}
+	</update>
+
+	
+	<delete id="delete" parameterType="java.lang.Integer">
+		delete from admin where id = #{value}
+	</delete>
+
+    <insert id="insertAndGetId" parameterMap="parameterMap" useGeneratedKeys="true" keyProperty="id">
+        insert into admin
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            phone,
+            email,
+            username,
+            password,
+            created_at,
+            updated_at,
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            #{phone},
+            #{email},
+            #{username},
+            #{password},
+            #{createdAt},
+            #{updatedAt},
+        </trim>
+    </insert>
+
+    <select id="getByParam" parameterMap="parameterMap" resultMap="AdminResultMap">
+        select
+        <include refid="columnSql"></include>
+        from admin t
+        <where>
+
+            <if test="username != null">
+                username = #{username}
+            </if>
+
+            <if test="phone != null">
+                or phone = #{phone}
+            </if>
+
+        </where>
+    </select>
+</mapper>

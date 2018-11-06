@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.label.biz.business.dao.ProjectDao">
+    <parameterMap id="parameterMap" type="com.label.biz.business.entity.Project"></parameterMap>
+    <resultMap id="ProjectResultMap" type="com.label.biz.business.entity.Project"></resultMap>
+
+
+    <sql id="columnSql">
+		<trim suffixOverrides=",">
+			t."id",
+			t."name",
+			t."description",
+			t."customer_id",
+            t."created_at",
+            t."updated_at",
+			t."type",
+			t."multi",
+			t."classify_id",
+			t."exam_num",
+	 	</trim>
+	</sql>
+	
+    <select id="getById" parameterType="Integer" resultMap="ProjectResultMap">
+        select
+			<include refid="columnSql"></include>
+		from project t
+		where t.id = #{value}
+    </select>
+
+
+
+    <insert id="add" parameterMap="parameterMap">
+		insert into project
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			id,
+			name,
+			description,
+			customer_id,
+            created_at,
+            updated_at,
+			type,
+			multi,
+			classify_id,
+			exam_num,
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			#{id},
+			#{name},
+			#{description},
+			#{customerId},
+            #{createdAt},
+            #{updatedAt},
+			#{type},
+			#{multi},
+			#{classifyId},
+			#{examNum},
+		</trim>
+	</insert>
+	
+	
+	<update id="updateNotNull" parameterMap="parameterMap">
+		update project
+		<set>
+			<if test="id != null">
+			id = #{id},
+			</if>
+			<if test="name != null">
+			name = #{name},
+			</if>
+			<if test="description != null">
+			description = #{description},
+			</if>
+			<if test="customerId != null">
+			customer_id = #{customerId},
+			</if>
+            <if test="createdAt != null">
+                created_at = #{createdAt},
+            </if>
+            <if test="updatedAt != null">
+                updated_at = #{updatedAt},
+            </if>
+			<if test="type != null">
+			type = #{type},
+			</if>
+			<if test="multi != null">
+			multi = #{multi},
+			</if>
+			<if test="classifyId != null">
+			classify_id = #{classifyId},
+			</if>
+			<if test="examNum != null">
+			exam_num = #{examNum},
+			</if>
+		</set>
+		where id = #{id}
+	</update>
+
+	
+	<delete id="delete" parameterType="java.lang.Integer">
+		delete from project where id = #{value}
+	</delete>
+</mapper>
